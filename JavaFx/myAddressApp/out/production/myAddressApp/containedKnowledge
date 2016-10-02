@@ -1,0 +1,18 @@
+一.本程序可以学到的知识
+        创建并启动一个 JavaFX 项目。
+        使用 Scene Builder 设计 UI 。
+        构造一个 模型 - 视图 - 控制器 (MVC) 模式的应用程序。
+        使用 ObservableLists 来自动更新用户界面。
+        使用 TableView 来响应列表中的选择。
+        创建一个 edit persons 的自定义弹出式对话框。
+        验证用户输入。
+        使用 CSS 样式化一个 JavaFX 应用程序。
+        使用 XML 保存数据。
+        在用户配置中保存最后一次打开文件的路径。
+        创建 JavaFX 的统计图表。
+        部署一个 JavaFX 到本机软件包。
+二.整个工程目录
+   com.yyHaker.ly.controller - 放置所有的控制器类(也就是应用程序的业务逻辑)
+    com.yyHaker.ly.model- 放置所有的模型类
+  com.yyHaker.ly.view- 放置所有界面和控件类
+   注意: view包里可能会包含一些控制器类，它可以直接被单个的view引用，我们叫它 视图-控制器。
