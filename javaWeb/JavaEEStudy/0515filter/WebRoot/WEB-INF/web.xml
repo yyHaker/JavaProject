@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+  <servlet>
+    <servlet-name>Aservlet</servlet-name>
+    <servlet-class>cn.yy.web.servlet.Aservlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>Bservlet</servlet-name>
+    <servlet-class>cn.yy.web.servlet.Bservlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>Cservlet</servlet-name>
+    <servlet-class>cn.yy.web.servlet.Cservlet</servlet-class>
+  </servlet>
+
+
+
+  <servlet-mapping>
+    <servlet-name>Aservlet</servlet-name>
+    <url-pattern>/Aservlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Bservlet</servlet-name>
+    <url-pattern>/Bservlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Cservlet</servlet-name>
+    <url-pattern>/Cservlet</url-pattern>
+  </servlet-mapping>
+  <!-- 过滤器Afilter的配置 ，与servlet基本相同-->
+  <filter>
+      <filter-name>Afilter</filter-name>
+      <filter-class>cn.yy.web.filter.Afilter</filter-class>
+  </filter>
+  <filter-mapping>
+      <filter-name>Afilter</filter-name>
+      <url-pattern>/Aservlet</url-pattern>
+       <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+  
+  <filter>
+      <filter-name>Bfilter</filter-name>
+      <filter-class>cn.yy.web.filter.Bfilter</filter-class>
+  </filter>
+  <filter-mapping>
+      <filter-name>Bfilter</filter-name>
+      <url-pattern>/Bservlet</url-pattern>
+  </filter-mapping>
+  
+   <filter>
+      <filter-name>Cfilter</filter-name>
+      <filter-class>cn.yy.web.filter.Cfilter</filter-class>
+  </filter>
+  <filter-mapping>
+      <filter-name>Cfilter</filter-name>
+      <url-pattern>/Cservlet</url-pattern>
+      <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+  
+</web-app>

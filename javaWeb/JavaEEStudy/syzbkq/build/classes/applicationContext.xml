@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	<!-- 自动实例化带@注释的实例 -->
+	<context:component-scan base-package="cn.thinking;com.neuedu.*;com.neuedu.controller.*" />
+	<!-- 引入jdbc配置文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+	<!--创建jdbc数据源 -->
+	<bean id="dataSourceOracle" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${orcl.driver}" />
+		<property name="url" value="${orcl.url}" />
+		<property name="username" value="${orcl.username}" />
+		<property name="password" value="${orcl.password}" />
+
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<property name="maxActive" value="20" />
+
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+			value="20" />
+	</bean>
+	
+	<bean id="dataSourceSqlserver" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${sqlserver.driver}" />
+		<property name="url" value="${sqlserver.url}" />
+		<property name="username" value="${sqlserver.username}" />
+		<property name="password" value="${sqlserver.password}" />
+
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<property name="maxActive" value="20" />
+
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+			value="20" />
+	</bean>
+	
+	<!-- 多数据源配置 -->
+	<bean id="dataSource" class="cn.thinking.system.datasource.ThreadLocalRountingDataSource">
+	    <property name="defaultTargetDataSource" ref="dataSourceOracle" />
+	    <property name="targetDataSources">
+	        <map key-type="cn.thinking.system.datasource.DataSources">
+	            <entry key="ORACLE" value-ref="dataSourceOracle"/>
+	            <entry key="SQLSERVER" value-ref="dataSourceSqlserver"/>
+	            <!-- 这里还可以加多个dataSource -->
+	        </map>
+	    </property>
+	</bean>   
+	 
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:./mybatis-config.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:cn/thinking/**/*.xml</value>
+				<value>classpath:com/neuedu/mapper/**/*.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
+	</bean>
+
+	<bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="delete*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="insert*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="save*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="send*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="feedback*" propagation="REQUIRED"
+				read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="secSend*" propagation="REQUIRED"
+				read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="end*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	  <property name="basePackage" value="com.neuedu.mapper*;com.neuedu.vacation*;com.neuedu.holiday*;com.neuedu.attendance*;com.neuedu.overtime*" />
+	  <!-- <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/> -->
+	</bean>
+
+	
+	<aop:config>
+		<aop:pointcut id="pc"
+			expression="execution(* *cn.thinking..service.*.*(..))" />
+		<aop:advisor pointcut-ref="pc" advice-ref="txAdvice" />
+	</aop:config>
+	<aop:aspectj-autoproxy/> 
+ 	<bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator" /> 
+	<!-- <bean id="exceptionHandler" class="cn.thinking.common.resolver.MyExceptionResolver" 
+		/> -->
+</beans>

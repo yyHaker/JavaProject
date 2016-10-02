@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.thinking.org.system.codelist.Codelist">
+	
+	<!-- 查询假期类型 -->
+	<select id="listvacationType" resultType="cn.thinking.org.system.codelist.Codelist">
+		select codename AS codename,codevalue as codevalue from TB_CODELIST t where t.codekind='VACATION_TYPE'
+		order by ordernum asc
+	</select>
+	
+	<!-- 班制类型 -->
+	<select id="listBanSystem" resultType="cn.thinking.org.system.codelist.Codelist">
+	    select codename AS codename,codevalue as codevalue from TB_CODELIST t where t.codekind='BanSystem'
+		order by ordernum asc
+	</select>
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.attendance.mapper.AttendanceMapper">
+	<!-- 考勤管理列表查询 -->
+	<select id="listPageSearchAttendanceList" resultType="com.neuedu.attendance.entity.Attendance"
+		parameterType="com.neuedu.attendance.entity.Attendance">
+		select 
+			u.personno as personno,
+			u.username as username,
+			u.telephone as telephone,
+			u.mobiletelephone as mobiletelephone,
+			c.userid as userid,
+			c.activity as activity,
+			to_char(c.createtime,'yyyy-mm-dd') as createtime
+		from SQLSERVER_CARDINFO c,SQLSERVER_USERINFO u
+		where 1=1
+		  and u.userid=c.userid
+		<if test='personno != null and personno != ""'>
+			AND u.personno = #{personno}
+		</if>
+		<if test='username != null and username != ""'>
+			AND u.username like '%${username}%'
+		</if>
+		<if test='createtime != null and createtime != ""'>
+			AND c.createtime =to_date(#{createtime},'yyyy-mm-dd')
+		</if>
+	</select>
+	<!-- 根据用户id查询打卡信息 -->
+	<select id="SearchAttendanceByUserid" resultType="com.neuedu.attendance.entity.Attendance"
+		parameterType="int">
+		select 
+			u.personno as personno,
+			u.username as username,
+			u.telephone as telephone,
+			u.mobiletelephone as mobiletelephone,
+			c.userid as userid,
+			c.activity as activity,
+			to_char(c.createtime,'yyyy-mm-dd') as createtime
+		from SQLSERVER_CARDINFO c,SQLSERVER_USERINFO u
+		where 1=1
+		  and u.userid=c.userid
+		  and c.userid=#{userid}
+	</select>
+	
+	<!-- 修改打卡信息 -->
+	<update id="updateAttendanceById" parameterType="com.neuedu.attendance.entity.Attendance">
+	begin
+		update SQLSERVER_CARDINFO s set
+      		s.activity = #{activity,jdbcType=NUMERIC},
+      		s.createtime = to_date(#{createtime,jdbcType=DATE},'yyyy-mm-dd')
+    	where s.userid = #{userid};
+		
+		update SQLSERVER_USERINFO set
+		    telephone = #{telephone,jdbcType=VARCHAR},
+			mobiletelephone = #{mobiletelephone,jdbcType=VARCHAR}
+		where userid = #{userid};
+	end;
+	</update>
+</mapper>	

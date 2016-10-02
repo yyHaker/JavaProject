@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.thinking.org.system.trainingplan.Trainingplan">
+<!-- 为了返回list 类型而定义的returnMap -->
+  <!--  <resultMap type="cn.thinking.org.system.trainingplan.Trainingplan" id="resultTrainingplanMapper">
+        <id column="TRANININGPLANNUM" property="trainingplannum" />
+        <result column="TOBJECT" property="tobject" />
+        <result column="PLANNUMBER" property="plannumber" />
+        <result column="PLANPERIOD" property="planperiod" />
+        <result column="TRAININGDATE" property="trainingdate" />
+        <result column="TPLACES" property="tplaces" />
+        <result column="LECTURESOURCE" property="lecturesource" />
+        <result column="HOSTDEPARTMENT" property="hostdepartment" />
+        <result column="ASSIATDEPARTMENT" property="assistdepartment" />
+        <result column="PLANCOMPLETION" property="plancompletion" />
+    </resultMap> -->
+  <select id="selectTrainingplanBydepartment" parameterType="cn.thinking.org.system.trainingplan.Trainingplan" 
+  	 resultType="cn.thinking.org.system.trainingplan.Trainingplan">
+  select 
+ 	 t.trainingplannum as trainingplannum,
+      t.tobjectives as tobjectives,
+      t.tcontent as tcontent,
+     t.tobject as tobject,
+     t.plannumber as plannumber,
+      t.planperiod as planperiod,
+     t.trainingdate as trainingdate,
+     t.tplaces as tplaces,
+     t.lecturersource as lecturesource,
+     t.hostdepartment as hostdepartment,
+     t.assistdepartment as assistdepartment,
+     t.plancompletion as plancompletion
+ 	 from trainingplan t where 1=1
+			<if test='hostdepartment != null and hostdepartment!=""'>
+				AND t.hostdepartment like '%${hostdepartment}%'
+			</if>
+			<if test='tcontent != null and tcontent!=""'>
+				AND t.tcontent like '%${tcontent}%'
+			</if>
+			<if test='tobject != null and tobject!=""'>
+				AND t.tobject like '%${tobject}%'
+			</if>
+			<if test='trainingdate != null and trainingdate!=""'>
+				AND t.trainingdate like '%${trainingdate}%'
+			</if>
+			<if test='tplaces != null and tplaces!=""'>
+				AND t.tplaces like '%${tplaces}%'
+			</if>
+			
+			<if test='lecturesource != null and lecturesource!=""'>
+				AND t.lecturersource like '%${lecturesource}%'
+			</if>
+			
+			<if test='assistdepartment != null and assistdepartment!=""'>
+				AND t.assistdepartment like '%${assistdepartment}%'
+			</if> 
+  </select>
+</mapper>

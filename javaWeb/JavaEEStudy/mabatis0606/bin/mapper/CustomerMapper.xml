@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.mabatis.mapper.CustomerMapper">
+  <!-- 使用mapper代理方法开发,namespace等于mapper全类名 -->
+      <!-- 根据cid查询customer
+      #{id}:其中的参数如果是简单类型，可以是value，也可以是其他名称
+       -->
+  <select id="findCustomerByCid" parameterType="String" resultType="cn.itcast.mybatis.po.Customer">
+        select * from Customer where cid=#{cid};
+  </select>
+     <!-- 根据用户名模糊查询用户信息 
+      ${}表示拼接sql串，将接收到的参数不加修饰的拼接在sql中，但可能会引起sql注入
+      ${}中的参数如果是简单类型，只能使用value
+     -->
+  <select id="findCustomerByCname" parameterType="String" resultType="cn.itcast.mybatis.po.Customer">
+          select * from Customer where cname like '%${value}%'
+  </select>
+   <!-- 添加用户 -->
+    <insert id="insertCustomer" parameterType="cn.itcast.mybatis.po.Customer">
+       insert into Customer value(#{cid},#{cname},#{city},#{discnt})
+    </insert>
+    <!-- 删除用户根据cid -->
+     <delete id="deleteCustomer" parameterType="String">
+         delete from Customer where cid=#{cid}
+     </delete>
+     <!-- 根据id更新用户 -->
+     <update id="updateCustomer" parameterType="cn.itcast.mybatis.po.Customer">
+        update Customer set cname=#{cname},city=#{city},discnt=#{discnt} where cid=#{cid}
+     </update>
+    
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.ClassManageMapper">
+  <!-- 主页显示的数据 -->
+  <select id="listPageSearchClassManage" parameterType="com.neuedu.entity.baseinfo.ClassManage" 
+  resultType="com.neuedu.entity.baseinfo.ClassManage">
+    select 
+     s.class_system_id as class_system_id,
+     s.department as department,
+     t.codename as name,
+     s.class_description,
+     s.class_name,
+     s.class_group
+    from sb_class_system s,tb_codelist t<!-- ,syzbrenli.DEPARTMENT tt -->
+    where t.codekind='BanSystem'
+    and t.codevalue=s.name
+    
+    <if test='department!=null and department!=""'>
+    and s.department like '%${department}%'
+    </if>
+    
+    <if test='name!=null and name!=""'>
+    and t.codevalue like '%${name}%'
+    </if>
+    
+    <if test='class_name!=null and class_name!=""'>
+    and s.class_name like'%${class_name}%'
+    </if>
+    
+    <if test='class_description!=null and class_description!=""'>
+    and s.class_description like '%${class_description}%'
+    </if>
+  </select>
+  
+  <!-- 新增班组 -->
+  <insert id="insertClassManage" parameterType="com.neuedu.entity.baseinfo.ClassManage">
+    insert into sb_class_system s
+     (s.class_system_id,
+      s.department,
+      s.name,
+      s.class_description,
+      s.class_name,
+      s.class_group
+      )
+     values
+     (CLASS_SYSTEM_ID.NEXTVAL,
+     #{department},
+     #{name},
+     #{class_description},
+     #{class_name},
+     #{class_group}
+     )
+  </insert>
+  
+  <!--查看详细信息-->
+  <select id="findClassManage" parameterType="String" resultType="com.neuedu.entity.baseinfo.ClassManage">
+    select 
+     t.class_system_id,
+     t.department,
+     tb.codename as name,
+     t.class_description ,
+     t.class_name,
+     t.class_group
+     from SB_CLASS_SYSTEM t,tb_codelist tb
+     where
+     tb.codekind='BanSystem'
+     and tb.codevalue=name 
+     and t.class_system_id=#{class_system_id}
+  </select>
+  
+  <!-- 删除数据 -->
+  <delete id="deleteClassManage" parameterType="String">
+  delete from SB_CLASS_SYSTEM s
+  where s.class_system_id=#{class_system_id}
+  </delete>
+  
+  <!-- 修改信息 -->
+  <update id="updateClassManage" parameterType="com.neuedu.entity.baseinfo.ClassManage">
+  update SB_CLASS_SYSTEM s set
+   s.department=#{department},
+   s.name=#{name},
+   s.class_description=#{class_description},
+   s.class_name=#{class_name},
+   s.class_group=#{class_group}
+  where s.class_system_id=#{class_system_id}
+  </update>
+</mapper>

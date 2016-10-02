@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.LeaveMapper">
+   <!--休假主页面显示的信息-->
+   <select id="listPageLeaveList" parameterType="com.neuedu.entity.baseinfo.Leave" resultType="com.neuedu.entity.baseinfo.Leave">
+     select 
+       t.ID,
+       t.userid,
+       t.vacation_user,
+       t.vacation_department,
+       t.vacation_type,
+       t.vacation_name,
+       t.vacation_data,
+       t.vacation_start,
+       t.vacation_end,
+       t.remark,
+       t.vacation_review
+      from SB_LEAVE_APPLICATION t
+      where 1=1
+      
+      <if test='vacation_user!=null and vacation_user!=""'>
+      and t.vacation_user like '%${vacation_user}%'
+      </if>
+      
+      <if test='vacation_department!=null and vacation_department!=""'>
+      and t.vacation_department like '%${vacation_department}%'
+      </if>
+      
+      <if test='vacation_name!=null and vacation_name!=""'>
+      and t.vacation_name like '%${vacation_name}%'
+      </if>
+      
+      <if test='vacation_start!=null and vacation_start!=""'>
+      and t.vacation_start =#{vacation_start}
+      </if>
+      
+      <if test='vacation_end!=null and vacation_end!=""'>
+      and t.vacation_end like =#{vacation_end}
+      </if>
+   </select>
+   <!--点击申请休假模态框显示的信息-->
+   <select id="getVacation" resultType="com.neuedu.entity.baseinfo.Leave">
+     select 
+      t.vacation_name,
+      t.vacation_id,
+      t.vacation_explain,
+      t.vacation_type
+     from sb_vacationinfo_tab t
+     where t.vacation_type = 002
+   </select>
+   
+   <!-- 申请休假即插入一条数据 -->
+   <!-- 插入语句没有返回值类型，只有传入参数类型 -->
+   <insert id="insertLeave" parameterType="com.neuedu.entity.baseinfo.Leave">
+   insert into sb_leave_application
+     (ID,
+     userid,
+     vacation_user,
+     vacation_department,
+     vacation_name,
+     vacation_type,
+     vacation_data,
+     vacation_start,
+     vacation_end,
+     vacation_cause,
+     flag)
+   values
+    (LEAVE_APPLICATION_ID.NEXTVAL,
+    #{userid,jdbcType=VARCHAR},
+    #{vacation_user,jdbcType=VARCHAR},
+    #{vacation_department,jdbcType=VARCHAR},
+    #{vacation_name,jdbcType=VARCHAR},
+    '002',
+    #{vacation_data,jdbcType=VARCHAR},
+    #{vacation_start,jdbcType=VARCHAR},
+    #{vacation_end,jdbcType=VARCHAR},
+    #{vacation_cause,jdbcType=VARCHAR},
+    '1')
+   </insert>
+   
+   <select id="getVacation_explain" parameterType="String" resultType="String">
+   select 
+   s.vacation_explain 
+   from sb_vacationinfo_tab s
+   where s.vacation_name=#{vacation_name}
+   </select>
+   
+   <!-- 休假审批主页上显示的数据 -->
+   <select id="listPageLeaveReview" parameterType="com.neuedu.entity.baseinfo.Leave" resultType="com.neuedu.entity.baseinfo.Leave">
+   select 
+       t.ID,
+       t.vacation_user,
+       t.vacation_department,
+       t.userid,
+       t.vacation_type,
+       t.vacation_name,
+       t.vacation_data,
+       t.vacation_start,
+       t.vacation_end,
+       t.remark,
+       t.vacation_cause,
+       t.vacation_review
+      from SB_LEAVE_APPLICATION t
+      where 1=1
+      and t.flag=1
+      
+      <if test='vacation_user!=null and vacation_user!=""'>
+      and t.vacation_user like '%${vacation_user}%'
+      </if>
+      
+      <if test='vacation_department!=null and vacation_department!=""'>
+      and t.vacation_department like '%${vacation_department}%'
+      </if>
+      
+      <if test='vacation_name!=null and vacation_name!=""'>
+      and t.vacation_name like '%${vacation_name}%'
+      </if>
+      
+      <if test='vacation_start!=null and vacation_start!=""'>
+      and t.vacation_start=#{vacation_start}
+      </if>
+   </select>
+   <!-- 休假审批通过,这里的传入参数我用对象,但是对象中只用ID这个属性 -->
+   <update id="updataVacation_review" parameterType="com.neuedu.entity.baseinfo.Leave">
+     begin
+     <foreach collection="list" item="item" index="index" >    
+      update SB_LEAVE_APPLICATION t
+      set t.vacation_review = 1
+      where t.ID = #{item.ID};
+      </foreach>
+     end;
+   </update>
+   
+   <!-- 通过请假原因找到一条数据 -->
+   <select id="getLeave" parameterType="String" resultType="com.neuedu.entity.baseinfo.Leave">
+    select 
+     t.ID,
+     t.userid,
+     t.vacation_type,
+     t.vacation_name,
+     t.vacation_data,
+     t.vacation_start,
+     t.vacation_end,
+     t.vacation_review,
+     t.vacation_cause
+     from sb_leave_application t
+     where t.ID=#{ID}
+   </select>
+   <!-- 点击休假名字查看休假信息 -->
+   <select id="getInfo" parameterType="String" resultType="com.neuedu.entity.baseinfo.Leave">
+   select 
+     t.ID,
+     t.vacation_user,
+     t.vacation_type,
+     t.vacation_department,
+     t.vacation_name,
+     t.vacation_data,
+     t.vacation_start,
+     t.vacation_end,
+     t.vacation_cause,
+     t.vacation_review
+   from sb_leave_application t
+   where t.ID=#{ID}
+   </select>
+   
+   <!--提前销假 ，就是把表中的flag数据由1变成2；那么这条数据就不会被显示在主页上了，提前销假成功 -->
+   <update id="updateFlag" parameterType="String">
+     update sb_leave_application s
+     set s.flag=2
+     where s.id=#{ID}
+   </update>
+</mapper>

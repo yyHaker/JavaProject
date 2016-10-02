@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.vacation.mapper.VacationMapper">
+
+	<!-- 假期管理列表查询 -->
+	<select id="listPageSearchVacationList" resultType="com.neuedu.vacation.entity.Vacation"
+		parameterType="com.neuedu.vacation.entity.Vacation">
+		select 
+		   t.vacation_id      as vacationId,
+	       t.vacation_name    as vacationName,
+	       t.vacation_explain as vacationExplain,
+	       t.vacation_remarks as vacationRemarks,
+	       tc.codename        as vacationTypeName,
+	       t.vacation_type    as vacationType,
+	       t.vacation_status  as vacationStatus,
+	       t.create_name      as createName,
+	       t.create_time      as createTime,
+	       t.update_time      as updateTime
+	  from sb_vacationinfo_tab t, tb_codelist tc
+	 where 1 = 1
+	   and t.vacation_type = tc.codevalue
+	   and tc.codekind = 'VACATION_TYPE'
+		<if test = 'vacationName!= null and vacationName!=""'>
+			AND t.vacation_name like '%${vacationName}%'
+		</if>
+		<if test = 'vacationExplain!= null and vacationExplain!=""'>
+			AND t.vacation_explain like '%${vacationExplain}%'
+		</if>
+		<if test = 'vacationType!= null and vacationType!=""'>
+			AND t.vacation_type = #{vacationType}
+		</if>
+		<if test = 'vacationStatus!= null and vacationStatus!=""'>
+			AND t.vacation_status = #{vacationStatus}
+		</if>
+		order by t.vacation_status desc , t.vacation_type,t.vacation_id,t.vacation_id
+	</select>
+	
+	<!-- 新增假期信息 -->
+	<insert id="insertVacation" parameterType="com.neuedu.vacation.entity.Vacation">
+	insert into sb_vacationinfo_tab t
+	(
+	VACATION_ID,
+	VACATION_NAME,
+	VACATION_EXPLAIN,
+	VACATION_REMARKS,
+	VACATION_TYPE,
+	VACATION_STATUS,
+	CREATE_NAME,
+	CREATE_TIME,
+	UPDATE_TIME
+	)
+	values
+	(
+	VACATION_ID.NEXTVAL,
+	#{vacationName,jdbcType=VARCHAR},
+	#{vacationExplain,jdbcType=VARCHAR},
+	#{vacationRemarks,jdbcType=VARCHAR},
+	#{vacationType,jdbcType=VARCHAR},
+	#{vacationStatus,jdbcType=VARCHAR},
+	#{createName,jdbcType=VARCHAR},
+	sysdate,
+	sysdate
+	)
+	</insert>
+	
+	<!-- 根据假期ID查询假期信息 -->
+	<select id="searchVacationInfoById" resultType="com.neuedu.vacation.entity.Vacation" parameterType="int">
+		select 
+		   t.vacation_id      as vacationId,
+	       t.vacation_name    as vacationName,
+	       t.vacation_explain as vacationExplain,
+	       t.vacation_remarks as vacationRemarks,
+	       t.vacation_type    as vacationType,
+	       tc.codename        as vacationTypeName,
+	       t.vacation_status  as vacationStatus,
+	       t.create_name      as createName,
+	       t.create_time      as createTime,
+	       t.update_time      as updateTime
+	  from sb_vacationinfo_tab t，tb_codelist tc
+	 where 1 = 1
+	   and t.vacation_type = tc.codevalue
+	   and t.vacation_id = #{vacationId}
+	</select>
+	
+	<!-- 修改假期信息 -->
+	<update id="updateVacationById" parameterType="com.neuedu.vacation.entity.Vacation">
+	update sb_vacationinfo_tab t set
+		t.vacation_name = #{vacationName,jdbcType=VARCHAR},
+		t.vacation_explain = #{vacationExplain,jdbcType=VARCHAR},
+		t.vacation_remarks = #{vacationRemarks,jdbcType=VARCHAR},
+		t.vacation_type = #{vacationType,jdbcType=VARCHAR},
+		t.vacation_status = #{vacationStatus,jdbcType=VARCHAR},
+		t.update_time = sysdate
+		where t.vacation_id = #{vacationId}
+	</update>
+	
+</mapper>

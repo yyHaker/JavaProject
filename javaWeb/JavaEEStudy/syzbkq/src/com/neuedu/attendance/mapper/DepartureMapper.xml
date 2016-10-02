@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.attendance.mapper.DepartureMapper">
+<!--离岗申请的主页显示的数据-->
+  <select id="listPageSearchDeparture" parameterType="com.neuedu.attendance.entity.Departure" 
+   resultType="com.neuedu.attendance.entity.Departure">
+    select 
+     s.id,
+     s.departure_name,
+     s.departure_department,
+     s.departure_group,
+     s.departure_class,
+     s.departure_reason,
+     s.departure_date,
+     to_char(s.departure_time,'yyyy-mm-dd') as departure_time,
+     s.departure_status
+    from sb_departure_application s
+    where 1=1
+    
+    <if test='departure_name!=null and departure_name!=""'>
+    and s.departure_name like '%${departure_name}%'
+    </if>
+    
+    <if test='departure_department!=null and departure_department!=""'>
+    and s.departure_department like '%${departure_department}%'
+    </if>
+    
+    <if test='departure_group!=null and departure_group!=""'>
+    and s.departure_group like '%${departure_group}%'
+    </if>
+    
+    <if test='departure_time!=null and departure_time!=""'>
+    and s.departure_time=to_date(#{departure_time},'yyyy-mm-dd')
+    </if>
+  </select>
+  <!--申请离岗-->
+  <insert id="insertDeparture" parameterType="com.neuedu.attendance.entity.Departure">
+    insert into sb_departure_application
+     (ID,
+     departure_name,
+     departure_department,
+     departure_group,
+     departure_class,
+     departure_reason,
+     departure_date,
+     departure_time)
+   values
+    (
+    DEPARTURE_APPLICATION_ID.NEXTVAL,
+    #{departure_name,jdbcType=VARCHAR},
+    #{departure_department,jdbcType=VARCHAR},
+    #{departure_group,jdbcType=VARCHAR},
+    #{departure_class,jdbcType=VARCHAR},
+    #{departure_reason,jdbcType=VARCHAR},
+    #{departure_date,jdbcType=VARCHAR},
+    to_date(#{departure_time,jdbcType=DATE},'yyyy-mm-dd')
+    )
+  </insert>
+  
+  <!-- 更改审批状态 -->
+  <update id="upstatus" parameterType="com.neuedu.attendance.entity.Departure">
+  begin
+  <foreach collection="list" item="item" index="index">
+  update SB_DEPARTURE_APPLICATION t set
+  t.departure_status=2
+  where t.id=#{item.ID};
+  </foreach>
+  end;
+  </update>
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.overtime.mapper.OvertimeMapper">
+<!--加班申请的主页显示的数据-->
+  <select id="listPageOvertime" parameterType="com.neuedu.overtime.entity.Overtime" 
+   resultType="com.neuedu.overtime.entity.Overtime">
+    select 
+     o.OVERTIME_ID as overtime_id,
+     o.APPLICANT as applicant,
+     to_char(o.APPLY_TIME,'yyyy-mm-dd') as apply_time,
+     o.BEGIN_TIME as begin_time,
+     o.END_TIME as end_time,
+     o.OVERTIME_REASON as overtime_reason,
+     to_char(o.SUBMIT_TIME,'yyyy-mm-dd') as submit_time,
+     o.STATE as state,
+     o.APPROVER as approver,
+     o.REJECT_REASON as reject_reason
+    from sb_overtime_application o
+    where 1=1   
+    <if test='applicant != null and applicant != ""'>
+    AND o.applicant like '%${applicant}%'
+    </if>       
+    <if test='apply_time != null and apply_time != ""'>
+      <!-- oracle数据库转换时间格式的函数 -->
+    AND o.apply_time = to_date(#{apply_time},'yyyy-mm-dd')
+    </if>   
+    <if test='submit_time != null and submit_time != ""'>
+    AND o.submit_time = to_date(#{submit_time},'yyyy-mm-dd')
+    </if>    
+    <if test='state != null and state != ""'>
+    AND o.state = #{state}
+    </if>    
+    <if test='approver != null and approver != ""'>
+    AND o.approver like '%${approver}%'
+    </if>  
+    order by submit_time desc     
+  </select>
+  
+  <!--模糊查找申请信息-->
+  <select id="listPageName" parameterType="com.neuedu.overtime.entity.Overtime" 
+   resultType="com.neuedu.overtime.entity.Overtime">
+    select 
+     r.PERSONNELCODE as personnelcode,
+     r.NAME as username,
+     (select d.DNAME from syzbrenli.DEPARTMENT d where d.DID= r.NAMEOFDEPARTMENT ) as nameofdepartment  
+    from syzbrenli.RENLI r
+    where 1=1
+    <if test='personnelcode != null and personnelcode != ""'>
+    AND r.PERSONNELCODE like '%${personnelcode}%'
+    </if> 
+    <if test='username != null and username != ""'> 
+    AND r.NAME like '%${username}%'
+    </if> 
+    <if test='nameofdepartment != null and nameofdepartment != ""'>
+    AND r.NAMEOFDEPARTMENT = #{nameofdepartment}
+    </if>  
+  </select>
+   
+  <!--显示全部部门-->
+  <select id="searchDept" resultType="com.neuedu.overtime.entity.Overtime">
+    select 
+     d.DID as DID,
+     d.DNAME as dname
+    from syzbrenli.DEPARTMENT d
+   </select> 
+   
+   <!--显示部门id-->
+   <select id="searchDid" parameterType="String" resultType="com.neuedu.overtime.entity.Overtime">
+    select 
+     d.DID as DID,
+     d.DNAME as dname
+    from syzbrenli.DEPARTMENT d
+    where d.DNAME=#{dname}
+   </select> 
+   
+  <!--申请加班-->
+  <insert id="insertOvertime" parameterType="com.neuedu.overtime.entity.Overtime">
+  begin
+  <foreach collection="list" item="item" index="index">
+    insert into sb_overtime_application
+     (
+     overtime_id,
+     applicant,
+     apply_time,
+     begin_time,
+     end_time,
+     overtime_reason,
+     submit_time,
+     state,
+     reject_reason
+     )
+   values 
+    (
+    OVERTIME_ID.NEXTVAL,
+    #{item.username,jdbcType=VARCHAR},
+	to_date(#{item.apply_time,jdbcType=DATE},'yyyy-mm-dd'),
+    #{item.begin_time,jdbcType=VARCHAR},
+    #{item.end_time,jdbcType=VARCHAR},
+    #{item.overtime_reason,jdbcType=VARCHAR},
+    sysdate,
+    '未审批',
+    null
+    );  
+    </foreach>  
+     end;
+  </insert>
+</mapper>

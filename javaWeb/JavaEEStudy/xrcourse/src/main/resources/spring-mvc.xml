@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+        <description>Spring MVC Configuration</description>
+
+        <!-- 对静态资源文件的访问，交给default servlet handler处理 -->
+        <mvc:default-servlet-handler/>
+
+        <!-- 启用spring mvc 注解 -->
+        <context:annotation-config />
+
+        <!-- 默认的注解映射的支持 -->
+        <mvc:annotation-driven />
+
+        <!-- 设置使用注解的类所在的包 -->
+        <context:component-scan base-package="com.neusoft.*;com.neuedu.*"></context:component-scan>
+
+        <!-- 完成请求和注解POJO的映射 -->
+        <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/>
+
+
+
+    <!-- 上传文件拦截，设置最大上传文件大小 10M=10*1024*1024(B)=10485760 bytes -->
+        <bean id="multipartResolver"
+              class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+            <!-- one of the properties available; the maximum file size in bytes -->
+            <property name="maxUploadSize">
+                <value>5242880</value>
+            </property>
+        </bean>
+        <!--避免IE执行AJAX时，返回JSON出现下载文件 -->
+        <bean id="mappingJacksonHttpMessageConverter"
+              class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+            <property name="supportedMediaTypes">
+                <list>
+                    <value>text/html;charset=UTF-8</value>
+                </list>
+            </property>
+        </bean>
+        <!-- 启动SpringMVC的注解功能，完成请求和注解POJO的映射 -->
+        <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+            <property name="messageConverters">
+                <list>
+                    <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                        <property name="supportedMediaTypes">
+                            <list>
+                                <value>text/plain;charset=UTF-8</value>
+                            </list>
+                        </property>
+                    </bean>
+                    <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+                </list>
+            </property>
+        </bean>
+
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="order" value="1" />
+        <property name="mediaTypes">
+            <map>
+                <entry key="json" value="application/json" />
+                <entry key="xml" value="application/xml" />
+                <entry key="rss" value="application/rss+xml" />
+            </map>
+        </property>
+
+        <property name="defaultViews">
+            <list>
+                <!-- JSON View -->
+                <bean
+                        class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+                </bean>
+
+            </list>
+        </property>
+        <property name="ignoreAcceptHeader" value="true" />
+
+    </bean>
+
+
+  <!-- 测试时先将此处注释掉，发布时再解开注释 -->
+	<!-- 配置JMS连接工厂 -->
+   <!-- <bean id="consumerConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="failover:(tcp://10.10.25.251:61616)" />
+        <property name="useAsyncSend" value="true" />
+        <property name="clientID" value="xrcourseClientConnect" />
+    </bean>  -->
+    
+       <!-- 定义消息Destination  -->
+   <!--  <bean id="topicDestination"  class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="xrcourseListTopic"/>
+    </bean> 
+     -->
+     <!-- 配置消息消费监听者 -->
+    <!--  <bean id="consumerMessageListener" class="com.neuedu.xiaorui.mq.course.CourseListMessageListener" />
+    
+     <bean id="consumerListenerClient" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="consumerConnectionFactory" />
+             开启订阅模式 
+        <property name="pubSubDomain" value="true"/>
+        <property name="destination" ref="topicDestination" />
+        <property name="subscriptionDurable" value="true"/>
+            这里是设置接收客户端的ID，在持久化时，当这个客户端不在线时，消息就存在数据库里，直到被这个ID的客户端消费掉
+        <property name="clientId" value="xrcourseListClient"/>
+        <property name="messageListener" ref="consumerMessageListener" />
+        <property name="sessionAcknowledgeMode" value="1"/>
+    </bean>   -->
+    
+
+
+</beans>

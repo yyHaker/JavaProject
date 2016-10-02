@@ -1,0 +1,106 @@
+page = {
+	"currentPage" : 1,// 第几页，默认第一页
+	"showCount" : 10,// 每页显示多少条，默认10条
+	"totalPage" : 1
+};// 总页数，默认1页
+
+// 首页，执行该方法
+function goFirstPage() {
+	page.currentPage = 1;
+	searchOvertime();
+}
+// 上页，执行该方法
+function goPrePage() {
+	page.currentPage = page.currentPage - 1;
+	searchOvertime();
+}
+// 下页，执行该方法
+function goNextPage() {
+	page.currentPage = page.currentPage + 1;
+	searchOvertime();
+}
+// 尾页，执行该方法
+function goLastPage() {
+	page.currentPage = page.totalPage;
+	searchOvertime();
+}
+
+// 每页显示多少条改变时，执行该方法
+function showCountChange(showCountTmp) {
+	page.showCount = showCountTmp;
+	searchOvertime();
+}
+// 输入域填写跳转到第几页时，执行该方法
+function currentPageChange(currentPageTmp) {
+	if (!isNaN(currentPageTmp) && currentPageTmp > 0
+			&& currentPageTmp <= page.totalPage) {
+		page.currentPage = currentPageTmp;
+		searchOvertime();
+	}
+}
+
+$(document).ready(function(){
+	//引入时间控件
+	$(".timeselect").datetimepicker({
+		format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        language : 'zh-CN',
+        todayBtn: true
+	})
+	
+	$(".timechoose_fordate").datetimepicker({
+		format:'yyyy-mm-dd',
+		autoclose:true,
+		language : 'zh-CN',
+		minView : 2
+	})
+	
+	//加载分页模板
+	$('.pageDiv').load(path+'/module/common/page.jsp');
+	searchOvertime();
+	//全选和反选
+	/*$('#selectall').click(function(){
+		$(".box-items").each(function(){
+			$(this).prop("checked",!!$("#selectall").prop("checked"));
+		});
+	});*/
+	//模态框关闭的方法
+	$("#closeModal").click(function(){
+		window.close();
+	});
+})
+
+function searchOvertime(){
+	var searchForm = $("#searchOvertimeForm").collect();//收集表单信息
+	searchForm.page=page;//分页信息
+	
+	$.ajax({
+		data:JSON.stringify(searchForm),
+		type:"POST",
+		dataType:'json',
+		contentType:"application/json;charset=utf-8",
+		url:path+"/module/system/overtime/searchOvertimeList.do",
+		success: function(data){
+			var jsonData = $.parseJSON(data);
+			//加载数据列表
+			var tpl = document.getElementById('OvertimeHtml').innerHTML;
+			laytpl(tpl).render(jsonData,function(render){
+				$('.OvertimeArea').html(render);
+				pageInfo(jsonData);
+			});
+			
+		},
+		error:function(data){
+			BootstrapDialog.alert("error" + data.msg);
+		}
+	});
+}
+
+//跳转到申请加班页面
+function changePage(){
+	window.location.href=path + "/module/system/overtime/changePage.do";
+}
+//重置
+function addReset(){
+	$("#overtimeForm")[0].reset();
+}

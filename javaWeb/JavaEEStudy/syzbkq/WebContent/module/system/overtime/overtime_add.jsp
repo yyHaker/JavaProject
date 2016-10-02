@@ -1,0 +1,190 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+      <!-- 引入实体类 -->
+    <%@ page import="com.neuedu.overtime.entity.Overtime" %>
+    <%@ page import="cn.thinking.org.system.user.User" %>
+    <%@ include file="/module/common/config.jsp"%>    
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- ??? -->
+<script type="text/javascript"
+	src="<%=request.getContextPath()%>/module/system/overtime/overtime_add.js"
+	charset="UTF-8">
+</script>
+
+<title>加班申请</title>
+<script id="userHtml" type="text/html">
+{{# var list = d.data;  }}
+{{# for(var i = 0, len = list.length; i < len; i++){ }}
+    <tr>                        
+								<td>
+                                <input type="checkbox" class="box-items thinput" name="box" data-d="{{i}}" 
+									data-name="{{list[i].username}}" data-personnelcode={{list[i].personnelcode}}>
+                                </td>
+                                <td>{{list[i].personnelcode}}</td>
+                                <td>{{list[i].username}}</td>
+                                <td>{{list[i].nameofdepartment}}</td>														
+    </tr>
+{{# } }}
+{{# if(list.length<=0){ }}
+<tr>
+        <td colspan="11">没有相关数据</td>
+    </tr>
+{{# } }}
+</script>
+</head>
+<body>
+<<section id="main-content"> 
+		<section class="wrapper">
+			<div class="row mt">
+				<div class="col-md-12" id="delpath">
+			<div style="margin-left:20px">											
+			<!-- form 表单,制定input标签的bindname对应信息(collect.js)，并用bindData()方法绑定$("#form").bindData(row); -->
+
+			<form class="form" action="<%=path%>/module/system/overtime/save.do" name="overtimeForm" id="overtimeForm" method="post">						
+				<div class="top">
+					<p class="thick">
+						<i class="fa fa-bookmark"></i> 加班申请
+					</p>
+				</div></br></br>
+				
+				<div class="row" style="margin-bottom:10px">
+					<div class="col-md-8">
+						<div class="form-group" >
+							<label for="field-1" class="control-label">姓名：</label> 
+							<input type="text" class="form-control" maxlength="10" bindname="username" id="name-add" name="name-add" value="" readonly>	
+							<input type="hidden" class="form-control" maxlength="10" bindname="personnelcode" id="personnelcode-add" name="personnelcode-add" value="">	
+							<span style="display:block; float:left;margin-left: 850px;margin-bottom: -30px;margin-top: -38px;">
+								<button class="btn btn-success b" type="button" id="searchName" onclick="javascript:searchUser();">添加姓名</button>
+							</span>					
+						</div>
+						<span class="redStar" style="display:block; float:left;margin-left: 780px;margin-bottom: -25px;margin-top: -35px;color: red;" ><font size="3">*</font></span>																		
+					</div>
+				</div>
+				<div class="row" style="margin-bottom:10px">
+					<div class="col-md-5">
+						<div class="form-group">
+							<label for="field-1" class="control-label">申请日期：</label> 
+							<input type="text" placeholder="请选择时间" class="form-control timechoose timechoose_fordate timefordate" bindname="apply_time" id="apply_time-add" name="apply_time" value="">	
+						</div>
+						<span class="redStar" style="display:block; float:left;margin-left: 480px;margin-bottom: -30px;margin-top: -38px;color: red;" ><font size="3">*</font></span>										
+				</div>
+				</div>	
+				<div class="row" style="margin-bottom:10px">
+					<div class="col-md-5">
+						<div class="form-group">
+							<label for="field-1" class="control-label">申请起始时间：</label> 										
+							<input type="text" placeholder="请选择时间" class="form-control timechoose timechoose_fordate timeselect" bindname="begin_time" id="begin_time-add" name="begin_time" value=""> 																							
+						</div>
+						<span class="redStar" style="display:block; float:left;margin-left: 480px;margin-bottom: -30px;margin-top: -38px;color: red;" ><font size="3">*</font></span>								
+					</div>								
+					<div class="col-md-5" style="margin-left:25px">
+						<div class="form-group">
+							<label for="field-1" class="control-label">申请结束时间：</label> 
+							<input type="text" placeholder="请选择时间" class="form-control timechoose timechoose_fordate timeselect" bindname="end_time" id="end_time-add" name="end_time" value="">
+						</div>
+						<span class="redStar" style="display:block; float:left;margin-left: 480px;margin-bottom: -30px;margin-top: -38px;color: red;" ><font size="3">*</font></span>		
+					</div> 
+				</div>	
+				<div class="row" style="margin-bottom:10px">																																																							
+					<div class="col-md-10">
+						<div class="form-group">
+							<label for="field-1" class="control-label">加班原由：</label>
+							<textarea style="resize: none;display:block;" placeholder="字数限制为200字" rows="5" cols="90" bindname="overtime_reason" name="overtime_reason" id="overtime_reason-add" maxlength="200" value=""></textarea>
+						</div>
+						<span class="redStar" style="display:block; float:left;margin-left: 660px;margin-bottom: -30px;margin-top: -68px;color: red;" ><font size="3">*</font></span>		
+					</div>									
+				</div>										
+				<div class="row" style="margin-bottom:20px">
+		  		    <div class="form-group">
+					    <div class="col-md-3" style="color:red;margin-left: 5px;"><font size="3">*</font>号为必填项</div>
+				    </div>
+			    </div>
+			    <div class="row" style="margin-bottom:10px;margin-left:15px">
+			    	<button id="closeModal" type="button" class="btn btn-success b" onclick="javascript:overtimeSubmit();">申请</button>
+				</div>
+			</form>	
+			</div>	    
+			
+		<!-- Modal模态框申请加班新增页面-->
+		<div class="modal fade" id="addModal" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 id="userMessage" class="modal-title">添加员工姓名</h4>
+					</div>
+
+					<!-- form 表单,制定input标签的bindname对应信息(collect.js)，并用bindData()方法绑定$("#form").bindData(row); -->
+
+					<form action="<%=path%>/module/system/overtime/listPageName.do" name="userForm" id="userForm" method="post">
+						<div class="modal-body">						
+							<div>
+								<div class="col-md-5" style="margin-right:30px">
+									<div class="form-group">
+										<label for="field-1" class="control-label">人员编号：</label> 
+										<input type="text" placeholder="请输入数字" class="form-control" maxlength="10" bindname="personnelcode" id="personnelcode-search" name="personnelcode-search" value="">															
+									</div>									
+								</div>								
+								<div class="col-md-5">
+									<div class="form-group">
+										<label for="field-1" class="control-label">姓名：</label> 
+										<input type="text" placeholder="请输入文字" class="form-control" maxlength="10" bindname="username" id="name-search" name="name-search" value="">															
+									</div>									
+								</div>																								
+								 <div class="col-md-5" style="margin-right:30px">
+									<div class="form-group">
+										<label for="field-1" class="control-label">部门：</label> 
+										<select class="form-control" name="nameofdepartment_search" id="nameofdepartment_search" bindname="nameofdepartment" name="dept">
+					   						<c:choose>
+					   							<c:when test="${fn:length(deptList) == 1}"> 
+					   								 <c:forEach items="${deptList}" var="department">
+					     								<option value="${department.DID}" >${department.dname}</option>
+					    					 		 </c:forEach>
+					   							</c:when>
+					   							<c:otherwise> 
+					   								 <option value="" >请选择</option> 
+					   								 <c:forEach items="${deptList}" var="department">
+					     								<option value="${department.DID}" >${department.dname}</option>
+					    					 		 </c:forEach>
+					    						</c:otherwise> 
+					    					</c:choose>
+										</select>
+									</div>									
+								</div> 	
+								<div class="col-md-5">
+									<div class="form-group" style="margin-left:130px;margin-top:25px">
+										<button class="btn btn-info b" type="button" id="selectUser" onclick="javascript:searchUser();">查询</button>
+									</div>
+								</div>																																																			
+							</div>																				
+						</div>											
+					</form>
+					<table class="table event-table table-striped table-advance table-hover">
+						<thead>
+							<tr>
+								<th class="th"><input class="thinput" type="checkbox" name="all" id="selectall"></th>
+								<th class="th">人员编号</th>
+								<th class="th">姓名</th>
+								<th class="th">部门</th>
+								<!-- <th class="th">班组</th>	 -->															
+							</tr>
+						</thead>
+						<tbody class="userArea"></tbody>
+						</table>
+						<div class="pageDiv"></div>
+						<div class="modal-footer">						
+							<button class="btn btn-success b" id="closeModal" type="button" onclick="javascript:addUser();">添加</button>
+						</div>
+				</div>
+			</div>
+		</div>		
+		<!--  -->
+		</div></div></div>			
+		</section>
+	</section>
+</body>
+</html>

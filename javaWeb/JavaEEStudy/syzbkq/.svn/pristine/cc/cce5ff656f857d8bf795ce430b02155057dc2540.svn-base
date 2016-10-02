@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.thinking.org.system.trainer.Trainer">
+	<select id="listAllTrainer" parameterType="cn.thinking.org.system.trainer.Trainer"
+		resultType="cn.thinking.org.system.trainer.Trainer">
+		select
+		t.EMPLOYEENUM as employeenum,
+	    t.NAME as name,
+		t.USERID as userid,
+		t.SEX as sex,
+		t.AGE as age,
+		t.BIRTHDAY as birthday,
+		t.SENIORITY as seniority,
+		t.EDUCATION as education,
+		t.MAJOR as major,
+		t.DEPARTMENT as department,
+		t.POST as post,
+		t.POLITICALSTATUS as politicalstatus,
+		t.REMARK1 as remark1 
+		from INTERNAL_TRAINER t where 1=1
+			<if test='name != null and name!=""'>
+				AND t.name like '%${name}%'
+			</if>
+	</select>
+	
+	<select id="getTrainerById" parameterType="String"
+		resultType="cn.thinking.org.system.trainer.Trainer">
+		select
+		t.EMPLOYEENUM as employeenum,
+	    t.NAME as name,
+		t.USERID as userid,
+		t.SEX as sex,
+		t.AGE as age,
+		t.BIRTHDAY as birthday,
+		t.SENIORITY as seniority,
+		t.EDUCATION as education,
+		t.MAJOR as major,
+		t.DEPARTMENT as department,
+		t.POST as post,
+		t.POLITICALSTATUS as politicalstatus,
+		t.REMARK1 as remark1 
+		from INTERNAL_TRAINER t 
+		where t.EMPLOYEENUM=#{employeenum}		
+	</select>
+	
+	<delete id="deleteUser" parameterType="String">
+        delete from INTERNAL_TRAINER where employeenum=#{employeenum}
+    </delete>
+    
+    <update id="updateTrainById" parameterType="cn.thinking.org.system.trainer.Trainer" >
+	 update internal_trainer set 
+	 name=#{name},
+	 age=#{age},
+	 post=#{post},
+	 department=#{department},
+	 seniority=#{seniority},
+	 education=#{education} where employeenum=#{employeenum}
+	</update>
+	
+	
+</mapper>

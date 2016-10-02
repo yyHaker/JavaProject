@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd	
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- 扫描com.nirvana及子包，自动实例化带@controller注释的实例,
+	             由于实例化controller时会对controller关联的Service类一同实例化，所以这里需要排除@Service -->
+	<context:component-scan base-package="cn.thinking,com.neuedu">   
+	   <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>  
+	   <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>   
+	</context:component-scan>  
+
+    <!-- 使Controller中的@RequestMapping 生效-->
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+	
+	<!-- 拦截器：包括对登录session过期处理以及权限审查 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.do*"/>
+			<bean class="cn.thinking.common.interceptor.LoginHandlerInterceptor"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.do*"/>
+			<bean class="cn.thinking.common.interceptor.RightsHandlerInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<!-- 视图模式配置,对转向页面的路径解析,定义跳转的文件的前后缀 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 前缀 -->
+		<property name="prefix" value="/jsp/"/>
+		<!-- 后缀 -->
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<!-- 文件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+        <property name="defaultEncoding" value="utf-8"></property>   
+        <property name="maxUploadSize" value="10485760000"></property>  
+        <property name="maxInMemorySize" value="40960"></property>  
+    </bean> 
+    
+    <!-- 完成请求和注解POJO的映射 -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    	<!-- <property name="webBindingInitializer">
+        	 Configures Spring MVC DataBinder instances
+        	<bean class="com.nirvana.common.springext.bind.BindingInitializer">
+        		 <property name="validator" ref="validator" /> 
+        	</bean>
+    	</property> --> 
+    	<!-- 解决ajax调用中文乱码问题 -->
+    	<property name = "messageConverters">
+  			<list>
+  				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+  			 </list>
+ 		  </property>
+	</bean>
+	   	  
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+			<property name="mediaTypes">
+				<map>
+					<entry key="xml" value="application/xml"/>
+					<entry key="do" value="text/html"/>
+					<entry key="html" value="text/html"/>
+					<entry key="jsp" value="text/html"/>
+					<entry key="json" value="application/json"/>
+				</map>
+			</property>
+			<property name="viewResolvers">
+				<list>
+					<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+					<!-- Internal Resource View Resovler 基于Url扩展更好的支持JSP、JSTL的视图解析器,完成逻辑名称到真实页面的映射-->
+					<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+						<!-- View 视图模型初始化类,声明JSTL标签命名  -->
+						<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+						<!-- 前缀 -->
+						<property name="prefix" value="/"/>
+					</bean>
+				</list>
+			</property>
+			<property name="defaultViews">
+				<list>
+					<!-- json -->
+					<bean class="cn.thinking.common.view.MappingJacksonJsonView" />
+					<!-- xml 
+					<bean class="org.springframework.web.servlet.view.xml.MarshallingView" >
+						<property name="marshaller">
+							<bean class="org.springframework.oxm.xstream.XStreamMarshaller"/>
+						</property>
+					</bean>	
+					-->	
+				</list>
+			</property>
+	</bean>
+</beans>

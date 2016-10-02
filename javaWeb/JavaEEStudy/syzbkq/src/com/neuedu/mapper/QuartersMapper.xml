@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<mapper namespace="com.neuedu.mapper.QuartersMapper">
+	<select id="listPageAllQuarters" parameterType="com.neuedu.entity.baseinfo.Quarters" resultType="com.neuedu.entity.baseinfo.Quarters">
+	select pid as pid,
+			  pname as pname,
+			  pdescribe as pdescribe
+		from syzbrenli.quarters
+		WHERE 1=1
+		<if test="pid!=null and pid!=''">
+		AND pid like '%${pid}%'
+		</if>
+		<if test="pname!=null and pname!=''">
+			AND pname like '%${pname}%'
+		</if>
+		<if test="pdescribe!=null and pdescribe!=''">
+			AND pdescribe like '%${pdescribe}%'
+		</if>
+	</select>
+	
+	
+	<select id="getQuartersById" parameterType="int" resultType="com.neuedu.entity.baseinfo.Quarters">
+	select pid as pid,
+			  pname as pname,
+			  pdescribe as pdescribe
+		from syzbrenli.quarters
+		where pid =#{pid}
+	</select>
+	
+	<insert id="insertQuarters" parameterType="com.neuedu.entity.baseinfo.Quarters">
+	insert into syzbrenli.quarters
+					(PID,
+					PNAME,
+					PDESCRIBE)
+					values
+					(SYZBRENLI.PID.NEXTVAL,
+					#{pname,jdbcType=VARCHAR},
+					#{pdescribe,jdbcType=VARCHAR}
+					)
+	</insert>
+	
+	<update id="updateQuarters" parameterType="com.neuedu.entity.baseinfo.Quarters">
+	update syzbrenli.quarters set
+				pname  =#{pname,jdbcType=VARCHAR},
+				pdescribe =#{pdescribe,jdbcType=VARCHAR}
+			where pid =#{pid}
+	</update>
+	
+	<delete id="deleteQuarters" parameterType="int">
+	delete from syzbrenli.quarters t where t.pid =#{pid}
+	</delete>
+	
+	</mapper>

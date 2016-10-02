@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.BanTeamMapper">
+  <!--主页显示数据 -->
+  <select id="listPageSearchBanTeam" parameterType="com.neuedu.entity.baseinfo.BanTeam"
+  resultType="com.neuedu.entity.baseinfo.BanTeam">
+    select 
+     s.banteam_id, 
+     s.ban_department, 
+     s.ban_name, 
+     s.ban_group
+    from sb_banteam s 
+    where 1=1
+    
+    <if test='ban_department!=null and ban_department!=""'>
+    and s.ban_department like '%${ban_department}%' 
+    </if>
+    
+    <if test='ban_name!=null and ban_name!=""'>
+    and s.ban_name like '%${ban_name}%'
+    </if>
+    
+    <if test='ban_group!=null and ban_group!=""'>
+    and s.ban_group like '%${ban_group}%'
+    </if>
+  </select>
+  
+  <!-- 删除 -->
+  <delete id="deleteBanteam" parameterType="String">
+  delete from sb_banteam s
+  where s.banteam_id=#{banteam_id} 
+  </delete>
+  
+  <!-- 增加 -->
+  <insert id="insertBanteam" parameterType="com.neuedu.entity.baseinfo.BanTeam" >
+  insert into sb_banteam s 
+  values
+  (banteam_id.nextval,
+  #{ban_department},
+  #{ban_name},
+  #{ban_group})
+  </insert>
+  
+  <!-- 根据id得到一条数据 -->
+  <select id="findBanteam" parameterType="String" resultType="com.neuedu.entity.baseinfo.BanTeam">
+  select 
+   s.banteam_id,
+   s.ban_department,
+   s.ban_name,
+   s.ban_group
+  from sb_banteam s
+  where s.banteam_id = #{banTeam_id}
+  </select>
+  
+  <!--修改信息 -->
+  <update id="updateBanteam" parameterType="com.neuedu.entity.baseinfo.BanTeam">
+  update sb_banteam s set
+   s.ban_department=#{ban_department},
+   s.ban_name=#{ban_name},
+   s.ban_group=#{ban_group}
+  where s.banteam_id=#{banTeam_id}
+  </update>
+
+</mapper>

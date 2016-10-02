@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+  <servlet>
+    <servlet-name>Aservlet</servlet-name>
+    <servlet-class>com.servlet.Aservlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>Bservlet</servlet-name>
+    <servlet-class>com.servlet.Bservlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>Cservlet</servlet-name>
+    <servlet-class>com.servlet.Cservlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>oneServlet</servlet-name>
+    <servlet-class>com.servlet.oneServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>twoServlet</servlet-name>
+    <servlet-class>com.servlet.twoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>Eservlet</servlet-name>
+    <servlet-class>com.servlet.Eservlet</servlet-class>
+  </servlet>
+
+
+
+
+
+
+  <servlet-mapping>
+    <servlet-name>Aservlet</servlet-name>
+    <url-pattern>/Aservlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Bservlet</servlet-name>
+    <url-pattern>/Bservlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Cservlet</servlet-name>
+    <url-pattern>/Cservlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>oneServlet</servlet-name>
+    <url-pattern>/oneServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>twoServlet</servlet-name>
+    <url-pattern>/twoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Eservlet</servlet-name>
+    <url-pattern>/Eservlet</url-pattern>
+  </servlet-mapping>
+
+</web-app>

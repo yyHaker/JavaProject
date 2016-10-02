@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.itcast.ssm.mapper.UserMapper">
+
+    <select id="findUserById" parameterType="int" resultType="cn.itcast.ssm.po.User">
+		select * from user where id = #{id}
+	</select>
+	<!-- 开启二级缓存 -->
+<!-- 	<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+	<resultMap type="cn.zsq.mybatis.finish.domain.Orders" id="OrdersUserResultMap">
+		<id column="id" property="id"/>
+		<result column="userId" property="userId"/>
+		<result column="number" property="number"/>
+		<result column="createTime" property="createTime"/>
+		<result column="note" property="note"/>
+		<association property="user" javaType="cn.zsq.mybatis.finish.domain.User">
+			<id column="userId" property="id"/>
+			<result column="username" property="username"/>
+			<result column="birthday" property="birthday"/>
+			<result column="sex" property="sex"/>
+			<result column="address" property="address"/>
+		</association>
+	</resultMap>
+	
+	<resultMap type="cn.zsq.mybatis.finish.domain.Orders" id="OrdersOrderDetailUserResultMap">
+		<id column="id" property="id"/>
+		<result column="userId" property="userId"/>
+		<result column="number" property="number"/>
+		<result column="createTime" property="createTime"/>
+		<result column="note" property="note"/>
+		
+		<association property="user" javaType="cn.zsq.mybatis.finish.domain.User">
+			<id column="userId" property="id"/>
+			<result column="username" property="username"/>
+			<result column="birthday" property="birthday"/>
+			<result column="sex" property="sex"/>
+			<result column="address" property="address"/>
+		</association>
+		<collection property="orderDetailList" ofType="cn.zsq.mybatis.finish.domain.OrderDetails">
+			<id column="orderDetailId" property="id"/>
+			<result column="ordersId" property="ordersId"/>
+			<result column="itemsId" property="itemsId"/>
+			<result column="itemsSum" property="itemsSum"/>
+		</collection>
+	</resultMap> -->
+	
+	
+	
+<!-- 	<select id="selectOrdersUser" resultMap="OrdersUserResultMap">
+		select * from orders,user where orders.userId=user.id
+	</select>
+	
+	<select id="selectOrdersOrderDetailUser" resultMap="OrdersOrderDetailUserResultMap">
+		select orders.*,
+		user.id,user.username,user.birthday,user.sex,user.address, 
+		orderdetail.id orderDetailId, orderdetail.ordersId, orderdetail.itemsId, orderdetail.itemsSum
+		from orders,user,orderdetail where orders.userId=user.id and orderdetail.ordersId=orders.id;
+	</select>
+	
+	<resultMap type="cn.zsq.mybatis.finish.domain.Orders" id="selectOrdersUserLazyLoadingMap">
+		<id column="id" property="id"/>
+		<result column="userId" property="userId"/>
+		<result column="number" property="number"/>
+		<result column="createTime" property="createTime"/>
+		<result column="note" property="note"/>
+		<association property="user" javaType="cn.zsq.mybatis.finish.domain.User"
+		select="selectUserById" column="userId">
+		</association>
+	</resultMap>
+
+	<select id="selectOrdersUserLazyLoading" resultMap="selectOrdersUserLazyLoadingMap">
+		select * from orders
+	</select> -->
+</mapper>

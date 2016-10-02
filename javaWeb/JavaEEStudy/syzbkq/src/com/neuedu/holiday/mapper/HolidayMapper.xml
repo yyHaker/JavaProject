@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.holiday.mapper.HolidayMapper">
+
+	<!-- 法定假期维护列表查询 -->
+	<select id="searchHolidayList" resultType="com.neuedu.holiday.entity.Holiday"
+		parameterType="com.neuedu.holiday.entity.Holiday">
+		select a.hd_id 		as hdId,
+			a.vacation_id 	as vacationId,
+			b.vacation_name as vacationName,
+			a.hd_year 		as hdYear,
+			to_char(a.start_time,'yyyy-mm-dd') as startTime,
+			to_char(a.end_time,'yyyy-mm-dd') as endTime
+		from sb_statutory_holiday a, sb_vacationinfo_tab b
+		where 1 = 1
+		and a.vacation_id = b.vacation_id
+		<if test='vacationName != null and vacationName != ""'>
+			AND b.vacation_name like '%${vacationName}%'
+		</if>
+		<if test='hdYear != null and hdYear != ""'>
+			AND a.hd_year = #{hdYear}
+		</if>
+		<if test='startTime != null and startTime != ""'>
+			AND a.start_time >= to_date(#{startTime},'yyyy-mm-dd')
+		</if>
+		<if test='endTime != null and endTime != ""'>
+			AND to_date(#{endTime},'yyyy-mm-dd') >= a.end_time
+		</if>
+		order by a.hd_id , a.create_time desc
+	</select>
+	
+	<!-- 删除法定假期数据 -->
+	<delete id="deleteholiday" parameterType="int">
+		delete from sb_statutory_holiday 
+     	where hd_id= #{hdId}
+	</delete>
+	<!-- 根据id查询法定假期信息 -->
+	<select id="searchHolidayInfoById" parameterType="int" resultType="com.neuedu.holiday.entity.Holiday">
+		select 	s.hd_id as  hdId,
+				v.vacation_name as vacationName, 
+			   s.hd_year as hdYear, 
+			   to_char(s.start_time,'yyyy-mm-dd') as startTime, 
+			   to_char(s.end_time,'yyyy-mm-dd') as endTime
+  		from sb_statutory_holiday s,
+  			 sb_vacationinfo_tab v
+ 		where s.vacation_id = v.vacation_id
+  	 	and s.hd_id = #{hdId}
+	</select>
+	
+	<!-- 修改法定假期数据 -->
+	<update id="editHoliday" parameterType="com.neuedu.holiday.entity.Holiday">
+		update sb_statutory_holiday s
+     set 
+     s.hd_year=#{hdYear},
+     start_time=to_date(#{startTime},'yyyy-mm-dd'),
+     end_time=to_date(#{endTime},'yyyy-mm-dd'),
+     create_time=sysdate
+     where s.hd_id = #{hdId}
+	</update>
+	
+	<insert id="insertHoliday" parameterType="com.neuedu.holiday.entity.Holiday">
+		begin
+		<foreach collection="list" item="item" index="index">
+		insert into sb_statutory_holiday
+  			(hd_id,
+  			 hd_year,
+  			 vacation_id,
+  			 start_time,
+  			 end_time,
+  			 create_time)
+			values
+  			(hd_id.nextval,
+  			 #{item.hdYear},
+  			 #{item.vacationId},
+  			 to_date(#{item.startTime},'yyyy-mm-dd'),
+  			 to_date(#{item.endTime},'yyyy-mm-dd'),
+  			 sysdate
+  			);
+  			</foreach>
+  			end;
+	</insert>
+</mapper>

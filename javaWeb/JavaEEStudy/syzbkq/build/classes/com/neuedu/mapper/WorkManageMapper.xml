@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.WorkManageMapper">
+  <select id="listPageSearchWorkManage" parameterType="com.neuedu.entity.baseinfo.WorkManage"
+   resultType="com.neuedu.entity.baseinfo.WorkManage">
+   select 
+     s.workmanage_id,
+     s.wdepartment,
+     t.codename as wname,
+     s.wclass_name,
+     s.wclass_group,
+     s.wclass_description  
+   from sb_workmanage s,tb_codelist t
+   where t.codekind='BanSystem'
+   and t.codevalue=wname
+   
+   <if test='wdepartment!=null and wdepartment!=""'>
+   and s.wdepartment like '%${wdepartment}%'
+   </if>
+   
+   <if test='wname!=null and wname!=""'>
+   and t.codevalue like '%${wname}%'
+   </if>
+   
+   <if test='wclass_name!=null and wclass_name!=""'>
+   and s.wclass_name like '%${wclass_name}%'
+   </if>
+   
+   <if test='wclass_group!=null and wclass_group!=""'>
+   and s.wclass_group like '%${wclass_group}%'
+   </if>
+   
+   <if test='wclass_description!=null and wclass_description!=""'>
+   and s.wclass_description like '%${wclass_description}%'
+   </if>
+   
+  </select>
+  
+  <insert id="addWorkManage" parameterType="com.neuedu.entity.baseinfo.WorkManage">
+  insert into sb_workmanage s
+    (s.workmanage_id,
+     s.wdepartment,
+     s.wname,
+     s.wclass_name,
+     s.wclass_group,
+     s.wclass_description
+  )
+  values
+  (workmanage_id.nextval,
+  #{wdepartment,jdbcType=VARCHAR},
+  #{wname,jdbcType=VARCHAR},
+  #{wclass_name,jdbcType=VARCHAR},
+  #{wclass_group,jdbcType=VARCHAR},
+  #{wclass_description,jdbcType=VARCHAR}
+  )
+  </insert>
+  
+  <delete id="deleteWorkManage" parameterType="String">
+  delete from sb_workmanage s 
+  where s.workmanage_id=#{workmanage_id}
+  </delete>
+  
+  <select id="getWorkManage" parameterType="String" resultType="com.neuedu.entity.baseinfo.WorkManage">
+  select 
+   s.workmanage_id,
+   s.wdepartment,
+   s.wname,
+   s.wclass_name,
+   s.wclass_group,
+   s.wclass_description
+  from sb_workmanage s
+  where s.workmanage_id=#{workmanage_id}
+  </select>
+  
+  <update id="updateWorkManage" parameterType="com.neuedu.entity.baseinfo.WorkManage">
+  update sb_workmanage s set
+   s.wdepartment=#{wdepartment},
+   s.wname =#{wname},
+   s.wclass_name = #{wclass_name},
+   s.wclass_group = #{wclass_group},
+   s.wclass_description=#{wclass_description}
+  where s.workmanage_id=#{workmanage_id}
+  </update>
+</mapper>

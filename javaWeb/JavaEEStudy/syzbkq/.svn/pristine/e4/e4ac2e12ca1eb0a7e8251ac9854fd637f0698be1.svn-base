@@ -1,0 +1,363 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/module/common/config.jsp"%>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Form表单样例</title>
+</head>
+
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+	<header class="jumbotron subhead">
+		<div class="container">
+			<h1>
+				<a href="javascript:void(0);">Date控件样例--日期时间选择器</a>
+			</h1>
+			<p class="lead">
+				Bootstrap日期和时间表单组件。
+			</p>
+		</div>
+	</header>
+
+	<div class="container">
+
+		<!-- Docs nav -->
+		<div class="row">
+			<div class="col-md-3 bs-docs-sidebar">
+				<ul class="nav nav-list bs-docs-sidenav">
+					<li><a href="#demo_input"><i class="icon-chevron-right"></i>
+							Default input</a>
+					</li>
+					<li><a href="#demo_component"><i
+							class="icon-chevron-right"></i> Default component</a>
+					</li>
+					<li><a href="#demo_position"><i class="icon-chevron-right"></i>
+							定位</a>
+					</li>
+					<li><a href="#demo_advanced"><i class="icon-chevron-right"></i>
+							Advanced</a>
+					</li>
+					<li><a href="#demo_mirror"><i class="icon-chevron-right"></i>
+							Mirror field</a>
+					</li>
+					<li><a href="#demo_meridian"><i class="icon-chevron-right"></i>
+							Meridian format</a>
+					</li>
+					<li><a href="./index.htm"><i class="icon-chevron-right"></i>
+							文档</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="col-md-9">
+				<section id="demo_input">
+					<div class="page-header">
+						<h2>Default input</h2>
+					</div>
+
+					<div>
+						<div class="bs-docs-example">
+							<p>简单例子，最基本的实现方式</p>
+							<input size="16" type="text" value="2012-06-15 14:45" readonly class="form-control form_datetime1" style="width: 20%">
+						</div>
+						<pre class="prettyprint linenums">&lt;input size=&quot;16&quot; type=&quot;text&quot; value=&quot;2012-06-15 14:45&quot; readonly class=&quot;form-control form_datetime&quot; style="width:20%"&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&quot;.form_datetime&quot;).datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+&lt;/script&gt;            </pre>
+					</div>
+				</section>
+
+				<section id="demo_component">
+					<div class="page-header">
+						<h2>Default component</h2>
+					</div>
+
+					<div>
+						<div class="bs-docs-example">
+							<p>简单的组件实现例子</p>
+							<div class=".input-group date form_datetime2">
+								<input size="16" type="text" value="" readonly> <span class="form-control input-group-addon" style="width: 20%"><i class="icon-th"></i>
+								</span>
+							</div>
+						</div>
+						<pre class="prettyprint linenums">&lt;div class=&quot;input-append date form_datetime&quot;&gt;
+    &lt;input size=&quot;16&quot; type=&quot;text&quot; value=&quot;&quot; readonly&gt;
+    &lt;span class=&quot;add-on&quot;&gt;&lt;i class=&quot;icon-th&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&quot;.form_datetime&quot;).datetimepicker({
+        format: &quot;dd MM yyyy - hh:ii&quot;
+    });
+&lt;/script&gt;            </pre>
+					</div>
+				</section>
+
+
+				<!-- Overview
+        ================================================== -->
+				<section id="demo_position">
+					<div class="page-header">
+						<h2>定位</h2>
+					</div>
+
+					<div>
+						<div class="bs-docs-example">
+							<p>
+								The default picker's position is at the bottom left of the
+								button in the component implementation and under the input field
+								in the simple implementation.<br /> In some cases (narrow
+								screens), it can be very usefull to place the picker under the
+								input field in the component implementation.<br />
+							<div class="input-append date form_datetime5"
+								data-picker-position="bottom-left">
+								<input size="16" type="text" value="" readonly> <span
+									class="add-on"><i class="icon-th"></i>
+								</span>
+							</div>
+							</p>
+						</div>
+						<pre class="prettyprint linenums">&lt;div class=&quot;input-append date form_datetime&quot;&gt;
+    &lt;input size=&quot;16&quot; type=&quot;text&quot; value=&quot;&quot; readonly&gt;
+    &lt;span class=&quot;add-on&quot;&gt;&lt;i class=&quot;icon-th&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&quot;.form_datetime&quot;).datetimepicker({
+        format: &quot;dd MM yyyy - hh:ii&quot;,
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: &quot;bottom-left&quot;
+    });
+&lt;/script&gt;            </pre>
+					</div>
+				</section>
+
+				<!-- Overview
+        ================================================== -->
+				<section id="demo_advanced">
+					<div class="page-header">
+						<h2>Advanced</h2>
+					</div>
+
+					<div>
+						<p>
+							Based on
+							<code>icon-remove</code>
+							class, a
+							<code>reset</code>
+							button can be activated to reset the content of the field.<br />
+							In this implementation, the view date has been setup by default
+							to the 21 december 2012.<br /> Once the date and time are both
+							setup, the popin will auto close, instead of staying open.<br />
+							The button
+							<code>today</code>
+							has been activated too the fill the input field with the current
+							datetime.<br /> The
+							<code>minuteStep</code>
+							property can be used to specify the gap between each preset on
+							the hour view.
+						</p>
+						<div class="bs-docs-example">
+							<div class="input-append date form_datetime3"
+								data-date="2013-02-21T15:25:00Z">
+								<input size="16" type="text" value="" readonly> <span
+									class="add-on"><i class="icon-remove"></i>
+								</span> <span class="add-on"><i class="icon-calendar"></i>
+								</span>
+							</div>
+						</div>
+						<pre class="prettyprint linenums">&lt;div class=&quot;input-append date form_datetime&quot; data-date=&quot;2013-02-21T15:25:00Z&quot;&gt;
+    &lt;input size=&quot;16&quot; type=&quot;text&quot; value=&quot;&quot; readonly&gt;
+    &lt;span class=&quot;add-on&quot;&gt;&lt;i class=&quot;icon-remove&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+    &lt;span class=&quot;add-on&quot;&gt;&lt;i class=&quot;icon-calendar&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&quot;.form_datetime&quot;).datetimepicker({
+        format: &quot;dd MM yyyy - hh:ii&quot;,
+        autoclose: true,
+        todayBtn: true,
+        startDate: &quot;2013-02-14 10:00&quot;,
+        minuteStep: 10
+    });
+&lt;/script&gt;            </pre>
+					</div>
+				</section>
+
+				<!-- Overview
+        ================================================== -->
+				<section id="demo_mirror">
+					<div class="page-header">
+						<h2>Mirror field</h2>
+					</div>
+
+					<div>
+						<div class="bs-docs-example">
+							<p>
+								On each update event, a secondary field is updated with a
+								specific date format. Both
+								<code>id</code>
+								and
+								<code>format</code>
+								can be specified.<br /> The
+								<code>reset</code>
+								method will clear too this field.
+							</p>
+							<div class="input-append date form_datetime4"
+								data-date="2012-12-21T15:25:00Z"
+								data-date-format="dd MM yyyy - hh:ii">
+								<input size="16" type="text" value="" readonly> <span
+									class="add-on"><i class="icon-remove"></i>
+								</span> <span class="add-on"><i class="icon-th"></i>
+								</span>
+							</div>
+							<input type="text" id="mirror_field" value="" readonly />
+						</div>
+						<pre class="prettyprint linenums">&lt;div class=&quot;input-append date form_datetime&quot; data-date=&quot;2012-12-21T15:25:00Z&quot;&gt;
+    &lt;input size=&quot;16&quot; type=&quot;text&quot; value=&quot;&quot; readonly&gt;
+    &lt;span class=&quot;add-on&quot;&gt;&lt;i class=&quot;icon-remove&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+    &lt;span class=&quot;add-on&quot;&gt;&lt;i class=&quot;icon-th&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;input type=&quot;text&quot; id=&quot;mirror_field&quot; value=&quot;&quot; readonly /&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&quot;.form_datetime&quot;).datetimepicker({
+        format: &quot;dd MM yyyy - hh:ii&quot;,
+        linkField: &quot;mirror_field&quot;,
+        linkFormat: &quot;yyyy-mm-dd hh:ii&quot;
+    });
+&lt;/script&gt;            </pre>
+					</div>
+				</section>
+
+				<!-- Meridian
+        ================================================== -->
+				<section id="demo_meridian">
+					<div class="page-header">
+						<h2>Meridian format</h2>
+					</div>
+
+					<div>
+						<div class="bs-docs-example">
+							<p>
+								To select the date using the meridian, you can activate the
+								<code>showMeridian</code>
+								flag and display
+								<code>P</code>
+								to view the AM/PM selector in the input field. The
+								<code>HH</code>
+								format will display the hours in 12-format instead of 24-format
+								hour.
+							</p>
+							<div class="input-append date form_datetime6"
+								data-date="2012-12-21T15:25:00Z"
+								data-date-format="dd MM yyyy - HH:ii P">
+								<input size="16" type="text" value="" readonly> <span
+									class="add-on"><i class="icon-remove"></i>
+								</span> <span class="add-on"><i class="icon-th"></i>
+								</span>
+							</div>
+						</div>
+						<pre class="prettyprint linenums">&lt;div class=&quot;input-append date form_datetime&quot; data-date=&quot;2012-12-21T15:25:00Z&quot;&gt;
+    &lt;input size=&quot;16&quot; type=&quot;text&quot; value=&quot;&quot; readonly&gt;
+    &lt;span class=&quot;add-on&quot;&gt;&lt;i class=&quot;icon-remove&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+    &lt;span class=&quot;add-on&quot;&gt;&lt;i class=&quot;icon-th&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&quot;.form_datetime&quot;).datetimepicker({
+        format: &quot;dd MM yyyy - HH:ii P&quot;,
+        showMeridian: true,
+        autoclose: true,
+        todayBtn: true
+    });
+&lt;/script&gt;            </pre>
+					</div>
+				</section>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Footer
+  ================================================== -->
+	<footer class="footer">
+		<div class="container">
+			<p>
+				You can contact and follow me on Twitter <a
+					href="https://twitter.com/sebastienmalot" target="_blank">@sebastienmalot</a>.
+			</p>
+			<ul class="footer-links">
+				<li><a href="./index.htm">项目</a>
+				</li>
+				<li class="muted">&middot;</li>
+				<li><a href="./demo.htm">案例</a>
+				</li>
+				<li class="muted">&middot;</li>
+				<li><a
+					href="https://github.com/smalot/bootstrap-datetimepicker/archive/master.zip">下载</a>
+				</li>
+				<li class="muted">&middot;</li>
+				<li><a
+					href="https://github.com/smalot/bootstrap-datetimepicker">GitHub</a>
+				</li>
+			</ul>
+			<p>
+				Bootstrap DateTime Picker由<a href="http://www.bootcss.com/">Bootstrap中文网</a>翻译整理
+			</p>
+		</div>
+	</footer>
+
+
+
+	<!-- Analytics
+  ================================================== -->
+	<script type="text/javascript">
+		$('a[href^="#"]').click(function() {
+			var the_id = $(this).attr("href");
+			$('html, body').animate({
+				scrollTop : $(the_id).offset().top
+			}, 'slow');
+			return false;
+		});
+
+		$(".form_datetime1").datetimepicker({
+			format : 'yyyy-mm-dd hh:ii',
+			forceParse : true
+		});
+		$(".form_datetime2").datetimepicker({
+			format : "dd MM yyyy - hh:ii"
+		});
+		$(".form_datetime3").datetimepicker({
+			format : "dd MM yyyy - hh:ii",
+			autoclose : true,
+			todayBtn : true,
+			startDate : "2013-02-14 10:00",
+			minuteStep : 10
+		});
+		$(".form_datetime4").datetimepicker({
+			format : "dd MM yyyy - hh:ii",
+			linkField : "mirror_field",
+			linkFormat : "yyyy-mm-dd hh:ii"
+		});
+		$(".form_datetime5").datetimepicker({
+			format : "dd MM yyyy - hh:ii",
+			autoclose : true,
+			todayBtn : true
+		});
+		$(".form_datetime6").datetimepicker({
+			format : "dd MM yyyy - HH:ii P",
+			autoclose : true,
+			todayBtn : true,
+			showMeridian : true
+		});
+	</script>
+
+</body>
+</html>
+

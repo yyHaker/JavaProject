@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.mapper.DepartmentMapper">
+	<select id="listPageDepartment" parameterType="com.neuedu.entity.baseinfo.Department" resultType="com.neuedu.entity.baseinfo.Department">
+		select
+			d.did as did,
+			d.parentdepartment as parentdepartment,
+			to_char(d.createtime,'yyyy-mm-dd') as createtime,
+			d.dname as dname
+		from syzbrenli.department d
+			where 1 = 1
+			  <if test='parentdepartment!=null and parentdepartment!=""'>
+		      and d.parentdepartment like '%${parentdepartment}%'
+		      </if>
+		      <if test='createtime!=null and createtime!=""'>
+		      and d.createtime like '%${createtime}%'
+		      </if>
+		      <if test='dname!=null and dname!=""'>
+		      and d.dname like '%${dname}%'
+		      </if>
+	</select>	
+</mapper>

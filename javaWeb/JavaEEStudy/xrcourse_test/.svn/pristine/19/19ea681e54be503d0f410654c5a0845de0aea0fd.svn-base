@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.xiaorui.mapper.course.CourseMapper">
+
+	<resultMap type="com.neuedu.xiaorui.entity.DailyCourse" id="courseMap">
+		<result column="skrq" property="date"/>
+		<!-- 一对多的关系 -->
+		<!-- property: 指的是集合属性的值, ofType：指的是集合中元素的类型 -->
+		<collection property="courseList" ofType="com.neuedu.xiaorui.entity.CourseEntity">
+			<result column="bjbh" property="classId"/>
+			<result column="bjmc" property="className"/>
+			<result column="rid" property="rid"/>
+			<result column="skrq" property="courseDate"/>
+			<result column="qssj" property="startTime"/>
+			<result column="jssj" property="endTime"/>
+			<result column="kjmc" property="sectionName"/>
+			<result column="szjs" property="classroomId"/>
+			<result column="classroommc" property="classroomName"/>
+			<result column="kc" property="courseId"/>
+			<result column="kcmc" property="courseName"/>
+			<result column="js" property="teacherId"/>
+			<result column="jsmc" property="teacherName"/>
+		</collection>
+	</resultMap>
+	<!-- 查询指定时间段内某一班级课表 -->
+	<select id="getDailyCourseList" parameterType="java.util.HashMap" resultMap="courseMap">
+	SELECT bjbh,bjmc,rid,date_format(skrq,'%Y-%m-%d') AS skrq,qssj,jssj,kjmc,szjs,classroommc,kc,kcmc,js,jsmc FROM xrcourse_schedule_cache_tab t
+	where bjbh = #{classId}  and date_format(skrq,'%Y-%m-%d') &gt;= #{start} and date_format(skrq,'%Y-%m-%d') &lt;= #{end} 
+	ORDER BY skrq,qssj 
+	</select>
+	<!-- 查询指定日期某一班级课表 -->
+	<select id="getDailyCourse" parameterType="java.util.HashMap" resultMap="courseMap">
+	SELECT bjbh,bjmc,rid,date_format(skrq,'%Y-%m-%d') AS skrq,qssj,jssj,kjmc,szjs,classroommc,kc,kcmc,js,jsmc FROM xrcourse_schedule_cache_tab t
+	where bjbh = #{classId} and date_format(skrq,'%Y-%m-%d') = #{day}  
+	ORDER BY skrq,qssj
+	</select>
+	<!-- 删除指定日期后（包含当天）的课程 -->
+	<delete id="deleteCourseList" parameterType="java.util.HashMap">
+	delete from xrcourse_schedule_cache_tab  where date_format(skrq,'%Y-%m-%d') &gt;=#{beginTime}
+	</delete>
+	<!-- 批量插入课程信息 -->
+	<insert id="addCourseBatch" parameterType="java.util.List"> 
+	INSERT into xrcourse_schedule_cache_tab (bjbh,bjmc,rid,skrq,qssj,jssj,kjmc,szjs,classroommc,kc,kcmc,js,jsmc)
+	VALUES
+    <foreach collection="list" item="item" index="index" separator="," > 
+    (#{item.classId},#{item.className},#{item.rid},#{item.courseDate},#{item.startTime},#{item.endTime},#{item.sectionName},#{item.classroomId},#{item.classroomName},#{item.courseId},#{item.courseName},#{item.teacherId},#{item.teacherName}) 
+    </foreach>  
+	</insert> 
+	<!-- 根据翻页查询课程列表 -->
+	<select id="getCourseListByPage" parameterType="java.util.HashMap" resultMap="courseMap">
+	SELECT bjbh,bjmc,rid,date_format(skrq,'%Y-%m-%d') AS skrq,qssj,jssj,kjmc,szjs,classroommc,kc,kcmc,js,jsmc FROM xrcourse_schedule_cache_tab t
+	where bjbh = #{classId}  and date_format(skrq,'%Y-%m-%d') &gt;= #{day} 
+	ORDER BY skrq,qssj
+	LIMIT #{recordStart},#{recordNum}
+	</select>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+  <servlet>
+    <servlet-name>UploadServlet1</servlet-name>
+    <servlet-class>cn.yy.web.servlet.UploadServlet1</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UploadServlet2</servlet-name>
+    <servlet-class>cn.yy.web.servlet.UploadServlet2</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UploadServlet3</servlet-name>
+    <servlet-class>cn.yy.web.servlet.UploadServlet3</servlet-class>
+  </servlet>
+  <servlet>
+     <servlet-name>Download1Servlet</servlet-name>
+     <servlet-class>cn.yy.web.servlet.Download1Servlet</servlet-class>
+  </servlet>
+
+
+
+  <servlet-mapping>
+    <servlet-name>UploadServlet1</servlet-name>
+    <url-pattern>/UploadServlet1</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UploadServlet2</servlet-name>
+    <url-pattern>/UploadServlet2</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UploadServlet3</servlet-name>
+    <url-pattern>/UploadServlet3</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Download1Servlet</servlet-name>
+    <url-pattern>/Download1Servlet</url-pattern>
+  </servlet-mapping>
+
+</web-app>

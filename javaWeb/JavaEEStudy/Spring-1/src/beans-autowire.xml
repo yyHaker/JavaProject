@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+     <bean id="address" class="com.atguigu.spring.beans.autoware.Address"
+     p:city="Beijing" p:street="huihu"></bean>
+     <bean id="car" class="com.atguigu.spring.beans.autoware.Car"
+     p:brand="audi" p:price="280000"></bean>
+     
+   <!--   <bean id="person" class="com.atguigu.spring.beans.autoware.Person"
+     p:name="wuxin" p:address-ref="address" p:car-ref="car"></bean> -->
+     <!-- 根据名字进行自动装配,设置属性autowire="byname" -->
+     <bean id="person" class="com.atguigu.spring.beans.autoware.Person"
+     p:name="wuxin" autowire="byName"></bean>
+</beans>

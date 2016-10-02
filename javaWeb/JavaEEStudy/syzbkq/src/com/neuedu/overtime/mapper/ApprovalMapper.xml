@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.overtime.mapper.ApprovalMapper">
+<!--加班申请的主页显示的数据-->
+  <select id="listPageOvertime" parameterType="com.neuedu.overtime.entity.Overtime" 
+   resultType="com.neuedu.overtime.entity.Overtime">
+    select 
+     o.OVERTIME_ID as overtime_id,
+     o.APPLICANT as applicant,
+     to_char(o.APPLY_TIME,'yyyy-mm-dd') as apply_time,
+     o.BEGIN_TIME as begin_time,
+     o.END_TIME as end_time,
+     o.OVERTIME_REASON as overtime_reason,
+     to_char(o.SUBMIT_TIME,'yyyy-mm-dd') as submit_time,
+     o.STATE as state,
+     o.APPROVER as approver,
+     o.REJECT_REASON as reject_reason
+    from sb_overtime_application o
+    where 1=1   
+    <if test='applicant != null and applicant != ""'>
+    AND o.applicant like '%${applicant}%'
+    </if>       
+    <if test='apply_time != null and apply_time != ""'>
+    AND o.apply_time = to_date(#{apply_time},'yyyy-mm-dd')
+    </if>   
+    <if test='submit_time != null and submit_time != ""'>
+    AND o.submit_time = to_date(#{submit_time},'yyyy-mm-dd')
+    </if>    
+    <if test='state != null and state != ""'>
+    AND o.state = #{state}
+    </if>    
+    <if test='approver != null and approver != ""'>
+    AND o.approver like '%${approver}%'
+    </if>  
+    order by submit_time desc     
+  </select>
+  
+  <!-- 更改审批状态(同意) -->
+  <update id="updateApproval" parameterType="com.neuedu.overtime.entity.Overtime">
+  begin
+  <foreach collection="list" item="item" index="index">
+  update SB_OVERTIME_APPLICATION o set
+  o.state='已通过',
+  o.approver=#{item.approver,jdbcType=VARCHAR}
+  where o.overtime_id=#{item.overtime_id};
+  </foreach>
+  end;
+  </update>
+  
+  <!-- 更改审批状态 (驳回)-->
+  <update id="rejectApproval" parameterType="com.neuedu.overtime.entity.Overtime">
+  begin
+  <foreach collection="list" item="item" index="index">
+  update SB_OVERTIME_APPLICATION o set
+  o.state='未通过',
+  o.approver=#{item.approver,jdbcType=VARCHAR},
+  o.reject_reason=#{item.reject_reason,jdbcType=VARCHAR}
+  where o.overtime_id=#{item.overtime_id};
+  </foreach>  
+  end;
+  </update>
+ 
+ </mapper>

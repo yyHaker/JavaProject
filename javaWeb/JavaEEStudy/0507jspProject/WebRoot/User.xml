@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<users>
+	<user username="张三" password="123"/>
+	<user username="王五" password="456"/>
+	<user username="乐远" password="345"/>
+	<user username="" password=""/>
+	<user username="乌龙话" password="234"/>
+	<user username="李向明" password="34234"/>
+	<user username="qjidfjwqe" password="qweqweqw"/>
+	<user username="黎明yy" password="123"/>
+</users>
