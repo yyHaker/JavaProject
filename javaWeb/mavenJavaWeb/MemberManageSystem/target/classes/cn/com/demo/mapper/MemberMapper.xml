@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.demo.dao.MemberMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.demo.mapper.Member" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="storeId" property="storeid" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="VARCHAR" />
+    <result column="points" property="points" jdbcType="INTEGER" />
+    <result column="flightCount" property="flightcount" jdbcType="INTEGER" />
+    <result column="lastVisitedTime" property="lastvisitedtime" jdbcType="DATE" />
+    <result column="flightTime" property="flighttime" jdbcType="INTEGER" />
+    <result column="consumptionSum" property="consumptionsum" jdbcType="REAL" />
+    <result column="balance" property="balance" jdbcType="REAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, password, sex, birthday, telephone, storeId, level, points, flightCount, lastVisitedTime, 
+    flightTime, consumptionSum, balance
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from hy_memeber
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from hy_memeber
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.com.demo.mapper.Member" >
+    insert into hy_memeber (id, password, sex, 
+      birthday, telephone, storeId, 
+      level, points, flightCount, 
+      lastVisitedTime, flightTime, consumptionSum, 
+      balance)
+    values (#{id,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{birthday,jdbcType=DATE}, #{telephone,jdbcType=VARCHAR}, #{storeid,jdbcType=VARCHAR}, 
+      #{level,jdbcType=VARCHAR}, #{points,jdbcType=INTEGER}, #{flightcount,jdbcType=INTEGER}, 
+      #{lastvisitedtime,jdbcType=DATE}, #{flighttime,jdbcType=INTEGER}, #{consumptionsum,jdbcType=REAL}, 
+      #{balance,jdbcType=REAL})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.demo.mapper.Member" >
+    insert into hy_memeber
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="storeid != null" >
+        storeId,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="points != null" >
+        points,
+      </if>
+      <if test="flightcount != null" >
+        flightCount,
+      </if>
+      <if test="lastvisitedtime != null" >
+        lastVisitedTime,
+      </if>
+      <if test="flighttime != null" >
+        flightTime,
+      </if>
+      <if test="consumptionsum != null" >
+        consumptionSum,
+      </if>
+      <if test="balance != null" >
+        balance,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="storeid != null" >
+        #{storeid,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="points != null" >
+        #{points,jdbcType=INTEGER},
+      </if>
+      <if test="flightcount != null" >
+        #{flightcount,jdbcType=INTEGER},
+      </if>
+      <if test="lastvisitedtime != null" >
+        #{lastvisitedtime,jdbcType=DATE},
+      </if>
+      <if test="flighttime != null" >
+        #{flighttime,jdbcType=INTEGER},
+      </if>
+      <if test="consumptionsum != null" >
+        #{consumptionsum,jdbcType=REAL},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.demo.mapper.Member" >
+    update hy_memeber
+    <set >
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="storeid != null" >
+        storeId = #{storeid,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="points != null" >
+        points = #{points,jdbcType=INTEGER},
+      </if>
+      <if test="flightcount != null" >
+        flightCount = #{flightcount,jdbcType=INTEGER},
+      </if>
+      <if test="lastvisitedtime != null" >
+        lastVisitedTime = #{lastvisitedtime,jdbcType=DATE},
+      </if>
+      <if test="flighttime != null" >
+        flightTime = #{flighttime,jdbcType=INTEGER},
+      </if>
+      <if test="consumptionsum != null" >
+        consumptionSum = #{consumptionsum,jdbcType=REAL},
+      </if>
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=REAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.demo.mapper.Member" >
+    update hy_memeber
+    set password = #{password,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      storeId = #{storeid,jdbcType=VARCHAR},
+      level = #{level,jdbcType=VARCHAR},
+      points = #{points,jdbcType=INTEGER},
+      flightCount = #{flightcount,jdbcType=INTEGER},
+      lastVisitedTime = #{lastvisitedtime,jdbcType=DATE},
+      flightTime = #{flighttime,jdbcType=INTEGER},
+      consumptionSum = #{consumptionsum,jdbcType=REAL},
+      balance = #{balance,jdbcType=REAL}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
